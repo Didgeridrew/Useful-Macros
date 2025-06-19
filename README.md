@@ -1,2 +1,4 @@
 # Useful-Macros
-A collection of Home Assistant macros
+An à la carte collection of Home Assistant macros
+
+
