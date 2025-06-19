@@ -1,0 +1,32 @@
+{%- macro bodily_sensation_index(temp_entity, hum_entity) %}
+{%- if temp_entity is number %} 
+  {%- set tempC = temp_entity|float(0) %}
+{%- elif  states(temp_entity, with_unit=True) is search('°F') %}
+  {%- set t = temp_f_to_c(states(temp_entity)|float(0)) %}
+  {%- set tempC = t|float(0) %}
+{%- else %} {%- set tempC = states(temp_entity)|float(0) %}
+{%- endif %}
+{%- if hum_entity is number %}
+  {%- set rel_humidity = hum_entity %}
+{%- else %}  
+  {%- set rel_humidity = states(hum_entity)|float(0) %}
+{%- endif %}
+{{- (0.81 * tempC + 0.01 * rel_humidity * (0.99 * tempC - 14.3) + 46.3)|round(1) }}
+{%- endmacro %}
+
+{% macro bodily_sensation_description(input_value) %}
+{% set input_value= input_value|float(0) %}
+{% set in_dict = {
+  "Cold": (input_value< 55)|string,
+  "Chilly": (55 <= input_value< 60)|string,
+  "Average": (60 <= input_value< 65)|string,
+  "Pleasant": (65 <= input_value< 70)|string,
+  "Warm": (70 <= input_value< 75)|string,
+  "Mild Heat": (75 <= input_value< 80)|string,
+  "Hot": (80 <= input_value< 85)|string,
+  "Very Hot": (85 <= input_value)|string } %}
+{%- set key_list = in_dict.keys()|list %}
+{%- set val_list = in_dict.values()|list %}
+{% set d = dict(zip(val_list,key_list))%}
+{{ d.get(value) }}
+{% endmacro %}
