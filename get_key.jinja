@@ -1,0 +1,11 @@
+{# This macro allows you to get a dictionary key by supplying its value #}
+
+{%- macro get_key(in_dict, value, default='No Matching Value') %}
+{%- set key_list = in_dict.keys()|list %}
+{%- set val_list = in_dict.values()|list %}
+{%- if value in val_list %}
+  {% set d = dict(zip(val_list,key_list))%}
+  {{ d.get(value, default) }}
+{%- else %}
+  {{- default }}
+{%- endif %}{%- endmacro %}
