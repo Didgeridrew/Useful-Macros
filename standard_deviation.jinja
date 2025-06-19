@@ -1,0 +1,5 @@
+{%- macro standard_dev(values=[], is_pop=false) %}
+{%- if values is not list %}Values input must be a list.{%- else %}
+{%- set var = variance(values, is_pop) %}
+{{- (var|float**(0.5))|round(2, 0) }}{%- endif %}
+{%- endmacro %}
