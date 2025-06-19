@@ -1,0 +1,15 @@
+{% macro discomfort_index(temp_entity, hum_entity) %}
+{% if temp_entity is number %} 
+  {% set tempC = temp_entity|float(0) %}
+{% elif  states(temp_entity, with_unit=True) is search('°F') %}
+  {% set t = temp_f_to_c(states(temp_entity)|float(0)) %}
+  {% set tempC = t|float(0) %}
+{% else %} {% set tempC = states(temp_entity)|float(0) %}
+{% endif %}
+{% if hum_entity is number %}
+  {% set rel_humidity = hum_entity %}
+{% else %}  
+  {% set rel_humidity = states(hum_entity)|float(0) %}
+{% endif %}
+{{ (tempC - (0.55*(1  - (0.01*rel_humidity) ) * (tempC - 14.5)))|round(2,0) }}
+{% endmacro %}
