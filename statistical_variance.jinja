@@ -1,0 +1,11 @@
+{%- macro variance(values=[], is_pop=false) %}
+{%- if values is not list %}Values input must be a list.{%- else %}
+{%- set p = 1 if not is_pop else 0 %}
+{%- set l = values|select('is_number')|map('float', 0)|list %}
+{%- set m = l|average %}
+{%- set n = l|count %}
+{%- set ns = namespace( z = []) %}
+{%- for L in l %}{%- set ns.z = ns.z + [(L - m)**2]%}{%endfor%}
+{%- set var = ((ns.z|sum)/(n-p))|round(3, 0) %}
+{{- var }}{%- endif %}
+{%- endmacro %}
