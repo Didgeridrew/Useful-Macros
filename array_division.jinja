@@ -1,0 +1,10 @@
+{# This macro will divide each numeric value in an array by the provided divisor #}
+{%- macro array_division(val_list, divisor, rounding) %}
+  {%- if val_list is iterable and val_list is not string %}
+    {%- set divisor = 1 / divisor %}
+    {{- (val_list|select('is_number')|map('float'))
+    | map('multiply', divisor) | map('round', rounding|default(0)) | list }}
+  {%- else %}
+    Error
+  {%endif %}
+{%endmacro%}
