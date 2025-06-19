@@ -1,0 +1,19 @@
+{%- macro heat_index_fahrenheit(temp, hum) %}
+{%- set T = temp | round(1)%}
+{%- set RH = hum | round(1) %}
+{%- set HI_full = ((-42.379) + (2.04901523*T) + (10.14333127*RH) - (0.22475541*T*RH) - (0.00683783*T*T) - (0.05481717*RH*RH) + (0.00122874*T*T*RH) + (0.00085282*T*RH*RH) - (0.00000199*T*T*RH*RH)) | round (2) %}
+{%- set adj1 =  (((13-RH)/4)*((17-(T-95.0)|abs)/17)) |sqrt | round(2)  %}
+{%- set adj2 = ((((RH-85)/10) * ((87-T)/5)))| round (2) %}
+{%- set HI_simple = (0.5 * (T + 61.0 + ((T-68.0)*1.2) + (RH*0.094))) |round (2) %}
+{%- if ((HI_simple + T)/2) >= 80 %}
+  {%- if RH < 13 and (T > 80 and T < 112) %}
+    {{- (HI_full - adj1) | round (1) }}
+  {%- elif RH > 85 and (T > 80 and T < 87 ) %}
+    {{- (HI_full + adj2) | round (1) }}
+  {%- else %}
+    {{- HI_full | round (1)}}
+  {%- endif%}
+{%- else %}
+  {{- HI_simple | round (1)}}
+{%- endif %}
+{%- endmacro %}
