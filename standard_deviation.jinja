@@ -1,3 +1,5 @@
+{# This macro relies on the Statistical Variance macro: 
+https://github.com/Didgeridrew/Useful-Macros/blob/main/statistical_variance.jinja #}
 {%- macro standard_dev(values=[], is_pop=false) %}
 {%- if values is not list %}Values input must be a list.{%- else %}
 {%- set var = variance(values, is_pop) %}
