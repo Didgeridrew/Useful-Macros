@@ -1,3 +1,7 @@
+{# This macro use another macro to convert Imperial temperatures to Metric.
+Make sure to down load it to if you use Fahrenheit on your HA instance
+(https://github.com/Didgeridrew/Useful-Macros/blob/main/temp_f_to_c.jinja) #}
+
 {% macro discomfort_index(temp_entity, hum_entity) %}
 {% if temp_entity is number %} 
   {% set tempC = temp_entity|float(0) %}
